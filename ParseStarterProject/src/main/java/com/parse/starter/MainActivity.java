@@ -21,30 +21,31 @@ import com.parse.ParseQuery;
 
 public class MainActivity extends ActionBarActivity {
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-    ParseAnalytics.trackAppOpenedInBackground(getIntent());
+        ParseAnalytics.trackAppOpenedInBackground(getIntent());
+        ParseInstallation.getCurrentInstallation.saveInBackground();
+        ParsePush.subscribeInBackground("TechNews");
 
+        ParsePush parsePush = new ParsePush();
+        parsePush.setChannel("TechNews");
+        parsePush.setMessage("There are some awesome news here.");
+        parsePush.setInBackground();
 
+        ParseInstallation parseInstallation = ParseInstallation.getCurrentInstallation();
+        parseInstallation.set("username", "Rob");
+        parseInstallation.saveInBackground();
 
+        ParseQuery parseQuery = ParseInstallation.getQuery();
+        parseQuery.whereEqualTo("username", "Rob");
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        PrasePush newPush = new ParsePush();
+        newPush.setQuery(parseQuery);
+        newPush.setMessage("Hey Rob");
+        newPush.sendInBackground();
 
 
 //
@@ -69,27 +70,27 @@ public class MainActivity extends ActionBarActivity {
 //      newPush.sendInBackground();
 
 
-  }
-
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    // Inflate the menu; this adds items to the action bar if it is present.
-    getMenuInflater().inflate(R.menu.menu_main, menu);
-    return true;
-  }
-
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-    // Handle action bar item clicks here. The action bar will
-    // automatically handle clicks on the Home/Up button, so long
-    // as you specify a parent activity in AndroidManifest.xml.
-    int id = item.getItemId();
-
-    //noinspection SimplifiableIfStatement
-    if (id == R.id.action_settings) {
-      return true;
     }
 
-    return super.onOptionsItemSelected(item);
-  }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 }
